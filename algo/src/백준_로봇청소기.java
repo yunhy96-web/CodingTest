@@ -65,7 +65,7 @@ public class 백준_로봇청소기 {
         int nny = RobbotN + dy[naim];
         if(nnx >= 0 && nnx < M && nny >=0 && nny < N) { //1로 막혀잇지는 않아야함
             if(map[nny][nnx]!=1){
-                move(nny, nnx, aim); //후진만 하니까 바라보는 에임은 유지가 되어야한다.
+                move(nny, nnx, aim); //후진만 하니까 바라보는 에임은 유지가 되어야한다. ////////////이부분 중요!!!!!!!
             }
         }
     }
