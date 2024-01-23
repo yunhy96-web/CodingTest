@@ -27,7 +27,7 @@ public class 백준_나무자르기 {
             int mid =(max + min)/2;
             long sum = 0;
 
-            for(int j =0;j<N; j++){
+            for (int j = 0; j < N; j++){
                 if(arr[j] - mid > 0){
                     sum += arr[j] - mid;
                 }
