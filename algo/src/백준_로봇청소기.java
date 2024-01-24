@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 public class 백준_로봇청소기 {
     //0 1 2 3 순서대로 북 동 남 서
-    static int []dx = {0,1,0,-1}; //북 동 남 서
+    static int []dx = {0,1,0,-1}; //북 동 남 서 0 1 2 3
     static int []dy = {-1,0,1,0}; //북 동 남 서
     static int[][]map;
     static int count = 1;
@@ -43,10 +43,10 @@ public class 백준_로봇청소기 {
             //int nextaim;
             //다음방향 선언 아래 주석처리된 4개 줄의 코드를 간결화. 방향 전환을 의미.
             aim = (aim+3)%4;
-//            if(aim == 0) nextaim = 3;
+//            if(aim == 0) nextaim = 3; 북 -> 서
 //            if(aim == 1) nextaim = 0;
-//            if(aim == 2) nextaim = 1;
-//            if(aim == 3) nextaim = 2;
+//            if(aim == 2) nextaim = 1; 동
+//            if(aim == 3) nextaim = 2; 남
             int ddx = RobbotM + dx[aim]; //바라보고 있는 방향으로 한칸 이동
             int ddy = RobbotN + dy[aim];
             //이동 시 범위 판별 후 범위이내이거나 1 즉 벽이 아니고 2 즉 청소도 안한곳이면 해당으로 이동
@@ -61,9 +61,9 @@ public class 백준_로봇청소기 {
         }
         //위에서 이동 조건에 안맞는곳. 즉 다 막혀있어서 이동이 안되는 경우는 후진해야함.
         int naim = (aim+2)%4; //반대 방향
-        int nnx = RobbotM + dx[naim];
+        int nnx = RobbotM + dx[naim]; //-2
         int nny = RobbotN + dy[naim];
-        if(nnx >= 0 && nnx < M && nny >=0 && nny < N) { //1로 막혀잇지는 않아야함
+        if(nnx >= 0 && nnx < M && nny >=0 && nny < N ) { //1로 막혀잇지는 않아야함
             if(map[nny][nnx]!=1){
                 move(nny, nnx, aim); //후진만 하니까 바라보는 에임은 유지가 되어야한다. ////////////이부분 중요!!!!!!!
             }
