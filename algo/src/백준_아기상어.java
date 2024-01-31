@@ -12,6 +12,9 @@ public class 백준_아기상어 {
     static int[]dy = {-1, 0, 0, 1};
     static int N;
     static int[][]map;
+    static int minX = Integer.MAX_VALUE;
+    static int minY = Integer.MAX_VALUE;
+    static int minDist = Integer.MAX_VALUE;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -47,8 +50,19 @@ public class 백준_아기상어 {
                 if(ddx>0 && ddy >0 && ddx <N && ddy<N){
                     if(map[ddy][ddx]<= size && secondMap[ddy][ddx]==0){ //같은 크기 더작을 경우 이동가능 + 방문한적이 없음
                         //여기서 가장 가까운 다음 먹이가 있는 곳으로 이동하는 로직. 싹다 bfs 로 맵을 전부다 그린후
-                        que.add(new int[]{ddx, ddy});
                         secondMap[ddy][ddx]=secondMap[y][x]+1; //방문 표시는 시간이 지날수록 초가 늘어남. 마지막 출력값에서 -1 해줘야 정답이 나온다.
+
+                        if(map[ddy][ddx]!= 0 && map[ddy][ddx] < size){//먹을 수 있음.
+                            if(minDist>secondMap[ddy][ddx]){
+                                minDist = secondMap[ddy][ddx]; // 최소거리
+                                minX = ddx;
+                                minY = ddy;
+                            }else if(minDist == secondMap[ddy][ddx]){ //거리가 같을 시
+
+                            }
+                        }
+                        que.add(new int[]{ddx, ddy});
+
                         //가장가까운 원소가 있는 곳의 초를 추출.
                         //그 뒤 초를 샌 배열을 0으로 싹다 초기화. 그러면 이동할때 초가 0인부분만 검사를 해야하는 부분 추가해야함.
                     }
