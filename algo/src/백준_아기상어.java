@@ -6,70 +6,93 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class 백준_아기상어 {
-    static int size = 2; //물고기의 현재 크기
-    static int second = 0; //정답 즉 얼마나 초가 지났는지.
-    static int[]dx = {0, -1, 1, 0}; //상 좌 우 하
-    static int[]dy = {-1, 0, 0, 1};
     static int N;
     static int[][]map;
-    static int minX = Integer.MAX_VALUE;
-    static int minY = Integer.MAX_VALUE;
-    static int minDist = Integer.MAX_VALUE;
+    static int sharkSize = 2;
+    static int[]dx = {-1, 0, 1, 0};
+    static int[]dy = {0, -1, 0, 1};
+    static int minX =0;
+    static int minY =0;
+    static int minDist =0;
+    static int eatCount =0;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         map = new int[N][N];
-        int x=0;
-        int y=0;
-        for(int i =0; i< N; i++){
+        int sharkX=0;
+        int sharkY=0;
+        for(int i = 0 ; i<N; i++){
             st = new StringTokenizer(br.readLine());
             for(int j =0; j<N; j++){
                 map[i][j] = Integer.parseInt(st.nextToken());
-                if(map[i][j]==9){ //아기상어의 좌표
-                    x=j;
-                    y=i;
-                    map[i][j] = 0; //9이면 나중에 옮겨다닐때 못지나가니까 0으로 초기화해줌.
+                if(map[i][j] == 9){
+                    sharkX = j;
+                    sharkY = i;
+                    map[i][j] = 0;
                 }
             }
         }
-        int eat = 0;
-        bfs(x,y,size, eat, second);
+        int sum =0;
+
+        while (true){
+            minDist = Integer.MAX_VALUE;
+            minX = Integer.MAX_VALUE;
+            minY = Integer.MAX_VALUE;
+            bfs(sharkX, sharkY);
+            //minDist minX minY 3개를 알 수 있음
+            //상어 사이즈 업그레이드
+
+            if(minDist == Integer.MAX_VALUE){ //먹는거에 실패
+                break;
+            }else { //먹는거 성공
+                //상어사이즈 업그레이드
+                eatCount++;
+                if(eatCount == sharkSize){
+                    sharkSize++;
+                    eatCount = 0;
+                }
+                map[minY][minX] = 0;
+                sharkX = minX;
+                sharkY = minY;
+                sum += minDist-1; //거리합산
+            }
+        }
+        System.out.println(sum);
 
     }
-    private static void bfs(int x, int y, int size,int eat, int second){
+    private static void bfs(int sharkX, int sharkY){
         Queue<int[]>que = new LinkedList<>();
-        que.add(new int[]{x,y});
-        int [][]secondMap = new int[N][N]; //몇초가 지났는지.
-        secondMap[y][x] = 1;  // 첫시작점 방문표시
+        que.add(new int[]{sharkX, sharkY});
+        int [][]dist = new int[N][N];
+        dist[sharkY][sharkX] = 1;
+
         while (!que.isEmpty()){
             int []temp = que.poll();
-            for(int i = 0; i<4; i++){
-                int ddx = temp[0]+dx[i];
-                int ddy = temp[1]+dy[i];
-                if(ddx>0 && ddy >0 && ddx <N && ddy<N){
-                    if(map[ddy][ddx]<= size && secondMap[ddy][ddx]==0){ //같은 크기 더작을 경우 이동가능 + 방문한적이 없음
-                        //여기서 가장 가까운 다음 먹이가 있는 곳으로 이동하는 로직. 싹다 bfs 로 맵을 전부다 그린후
-                        secondMap[ddy][ddx]=secondMap[y][x]+1; //방문 표시는 시간이 지날수록 초가 늘어남. 마지막 출력값에서 -1 해줘야 정답이 나온다.
-
-                        if(map[ddy][ddx]!= 0 && map[ddy][ddx] < size){//먹을 수 있음.
-                            if(minDist>secondMap[ddy][ddx]){
-                                minDist = secondMap[ddy][ddx]; // 최소거리
-                                minX = ddx;
-                                minY = ddy;
-                            }else if(minDist == secondMap[ddy][ddx]){ //거리가 같을 시
-
+            sharkX = temp[0];
+            sharkY = temp[1];
+            for(int i =0; i<4; i++){
+                int nx = sharkX + dx[i];
+                int ny = sharkY + dy[i];
+                //nx ny 조건 들어가야함.
+                if(nx >=0 && ny >=0 && nx <N && ny <N){
+                    if(map[ny][nx]<=sharkSize && dist[ny][nx] == 0){
+                        dist[ny][nx] = dist[sharkY][sharkX] + 1;
+                        //minX, minY, minDist 를 알아야함.
+                        if (map[ny][nx] < sharkSize && map[ny][nx] != 0) { // 먹을 수 있는 물고기 발견
+                            if (minDist > dist[ny][nx] ||
+                                    (minDist == dist[ny][nx] && (minY > ny || (minY == ny && minX > nx)))) {
+                                minDist = dist[ny][nx];
+                                minX = nx;
+                                minY = ny;
                             }
                         }
-                        que.add(new int[]{ddx, ddy});
 
-                        //가장가까운 원소가 있는 곳의 초를 추출.
-                        //그 뒤 초를 샌 배열을 0으로 싹다 초기화. 그러면 이동할때 초가 0인부분만 검사를 해야하는 부분 추가해야함.
+                        que.add(new int[]{nx, ny});
                     }
                 }
             }
-
         }
-        //여기서 다시 bfs 를 재귀호출하여 그 점에서부터 다시 bfs 를 돌린다. size 랑 eat 이랑 같으면 size++, eat=0 으로 초기화
     }
+
 }
