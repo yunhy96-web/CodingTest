@@ -38,6 +38,7 @@ public class 백준_벽부수고이동하기 {
             for(int i =0 ;i<4; i++){
                 int ny = cury+dy[i];
                 int nx = curx+dx[i];
+
             }
         }
     }
