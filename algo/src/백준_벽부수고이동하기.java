@@ -42,8 +42,8 @@ public class 백준_벽부수고이동하기{
             int y = current[1];
             int wall = current[2];
 
-            if (x == N-1 && y == M-1) {
-                return visit[x][y][wall];
+            if (x == N-1 && y == M-1) { //끝까지 갔을 때 최단거리를 출력한다. 그런데 여기서 벽을 뚫었을때 안뚫었을때를 비교해서 두개 중에 최소값을 출력해야 하는 것이 아닌가?
+                return visit[x][y][wall]; //결국 끝까지 먼저 간게 가장 최소값이니까 부셧든 아니든 일단 여기서 리턴한 값이 가장 최단거리가 되긴함.
             }
 
             for (int i = 0; i < 4; i++) {
