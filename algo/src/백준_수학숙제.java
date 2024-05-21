@@ -30,7 +30,6 @@ public class 백준_수학숙제 {
                     }
                 }
             }
-
             if(sb.length()>0){
                 answer.add(new BigInteger(sb.toString()));
             }
