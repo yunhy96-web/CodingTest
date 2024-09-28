@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class 프로그래머스_소수찾기 { //2회차
+public class 프로그래머스_소수찾기 { //2회차 완료
     static boolean chk[];
     static ArrayList<Integer>arr = new ArrayList<>();
 
